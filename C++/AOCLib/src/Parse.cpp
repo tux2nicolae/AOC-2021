@@ -5,12 +5,12 @@
 #include "pch.h"
 #include "Parse.h"
 
-std::vector<std::string> AOC::Explode(const std::string& str, char separator)
+std::vector<std::string> AOC::Explode(const std::string & str, char separator)
 {
   std::vector<std::string> result;
 
   std::istringstream stream(str);
-  for (std::string token; std::getline(stream, token, separator); )
+  for (std::string token; std::getline(stream, token, separator);)
   {
     result.push_back(std::move(token));
   }
@@ -18,7 +18,7 @@ std::vector<std::string> AOC::Explode(const std::string& str, char separator)
   return result;
 }
 
-std::vector<std::string> AOC::Explode(const std::string& str, const string & regexSeparator)
+std::vector<std::string> AOC::Explode(const std::string & str, const string & regexSeparator)
 {
   regex reg(regexSeparator);
 
@@ -28,7 +28,7 @@ std::vector<std::string> AOC::Explode(const std::string& str, const string & reg
   return { iter, end };
 }
 
-int AOC::ExtractInt(const string& str, const string& regexStr)
+int AOC::ExtractInt(const string & str, const string & regexStr)
 {
   smatch match;
   regex_match(str, match, regex(regexStr));
@@ -38,12 +38,10 @@ int AOC::ExtractInt(const string& str, const string& regexStr)
   return stoi(match[0]);
 }
 
-
-vector<string> AOC::ExtractMatches(const string& str, const string& regexStr)
+vector<string> AOC::ExtractMatches(const string & str, const string & regexStr)
 {
   smatch matches;
   regex_match(str, matches, regex(regexStr));
 
   return { matches.begin(), matches.end() };
 }
-

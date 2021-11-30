@@ -5,17 +5,17 @@
 #include "pch.h"
 #include "Point.h"
 
-bool AOC::Point::operator==(const Point& second) const
+bool AOC::Point::operator==(const Point & second) const
 {
   return tie(x, y, z, w) == tie(second.x, second.y, second.z, second.w);
 }
 
-bool AOC::Point::operator<(const Point& second) const
+bool AOC::Point::operator<(const Point & second) const
 {
   return tie(x, y, z, w) < tie(second.x, second.y, second.z, second.w);
 }
 
-AOC::Point& AOC::Point::operator+=(const AOC::Point& second)
+AOC::Point & AOC::Point::operator+=(const AOC::Point & second)
 {
   x += second.x;
   y += second.y;
@@ -24,10 +24,9 @@ AOC::Point& AOC::Point::operator+=(const AOC::Point& second)
   return *this;
 }
 
-bool AOC::Point::IsInBoundary(const Point& from, const Point& to)
+bool AOC::Point::IsInBoundary(const Point & from, const Point & to)
 {
-  return (x >= from.x && y >= from.y && z >= from.z
-    && x <= to.x && y <= to.y && z <= to.z);
+  return (x >= from.x && y >= from.y && z >= from.z && x <= to.x && y <= to.y && z <= to.z);
 }
 
 AOC::Point AOC::Point::GetLeft()
@@ -70,23 +69,24 @@ AOC::Point AOC::Point::GetBottomRight()
   return GetBottom().GetRight();
 }
 
-AOC::Point AOC::Point::GetNeighbour(const char direction) {
+AOC::Point AOC::Point::GetNeighbour(const char direction)
+{
   switch (direction)
   {
   case '<':
-  case  'L':
+  case 'L':
   case 'l':
   case 'W':
   case 'w':
     return GetLeft();
   case '>':
-  case  'R':
+  case 'R':
   case 'r':
   case 'E':
   case 'e':
     return GetRight();
   case '^':
-  case  'T':
+  case 'T':
   case 't':
   case 'N':
   case 'n':
@@ -94,7 +94,7 @@ AOC::Point AOC::Point::GetNeighbour(const char direction) {
   case 'u':
     return GetTop();
   case 'v':
-  case  'B':
+  case 'B':
   case 'b':
   case 'S':
   case 's':
@@ -107,7 +107,7 @@ AOC::Point AOC::Point::GetNeighbour(const char direction) {
   }
 }
 
-AOC::Point AOC::Point::GetNeighbour(const string& direction)
+AOC::Point AOC::Point::GetNeighbour(const string & direction)
 {
   auto neighbour = *this;
   for (auto to : direction)
@@ -123,8 +123,8 @@ vector<AOC::Point> AOC::Point::GetDirectNeighbours()
 
 vector<AOC::Point> AOC::Point::GetAll2DNeighbours()
 {
-  return { GetTop(), GetTopRight(), GetRight(), GetBottomRight(),
-    GetBottom(), GetBottomLeft(), GetLeft(), GetTopLeft() };
+  return { GetTop(),    GetTopRight(),   GetRight(), GetBottomRight(),
+           GetBottom(), GetBottomLeft(), GetLeft(),  GetTopLeft() };
 }
 
 vector<AOC::Point> AOC::Point::GetAll3DNeighbours() const
@@ -133,7 +133,7 @@ vector<AOC::Point> AOC::Point::GetAll3DNeighbours() const
   neighbours.reserve(26);
 
   AOC::Point nextSlice = *this;
-  for (long long nextZ : {z - 1, z - 0, z + 1})
+  for (long long nextZ : { z - 1, z - 0, z + 1 })
   {
     nextSlice.z = nextZ;
 
@@ -142,12 +142,12 @@ vector<AOC::Point> AOC::Point::GetAll3DNeighbours() const
   }
 
   // neighbours
-  nextSlice = *this;
+  nextSlice   = *this;
   nextSlice.z = z - 1;
 
   neighbours.push_back(nextSlice);
 
-  nextSlice = *this;
+  nextSlice   = *this;
   nextSlice.z = z + 1;
 
   neighbours.push_back(nextSlice);
@@ -161,7 +161,7 @@ vector<AOC::Point> AOC::Point::GetAll4DNeighbours() const
   neighbours.reserve(80);
 
   AOC::Point nextSlice = *this;
-  for (long long nextW : {w - 1, w - 0, w + 1})
+  for (long long nextW : { w - 1, w - 0, w + 1 })
   {
     nextSlice.w = nextW;
 
@@ -170,12 +170,12 @@ vector<AOC::Point> AOC::Point::GetAll4DNeighbours() const
   }
 
   // neighbours
-  nextSlice = *this;
+  nextSlice   = *this;
   nextSlice.w = w - 1;
 
   neighbours.push_back(nextSlice);
 
-  nextSlice = *this;
+  nextSlice   = *this;
   nextSlice.w = w + 1;
 
   neighbours.push_back(nextSlice);
@@ -183,7 +183,7 @@ vector<AOC::Point> AOC::Point::GetAll4DNeighbours() const
   return neighbours;
 }
 
-void AOC::Point::RotateRight(const Point& origin)
+void AOC::Point::RotateRight(const Point & origin)
 {
   AOC::Point newPosition = *this;
 
@@ -203,7 +203,7 @@ void AOC::Point::RotateRight(const Point& origin)
   *this = newPosition;
 }
 
-void AOC::Point::RotateLeft(const Point& origin)
+void AOC::Point::RotateLeft(const Point & origin)
 {
   // 270 degree right rotation
   RotateRight();

@@ -19,19 +19,19 @@ public:
 
   //-----------------------------------------------------------
 
-  vector<int> ReadLineAsNumbers();
-  vector<int> ReadLineAsDigits();
+  vector<int>    ReadLineAsNumbers();
+  vector<int>    ReadLineAsDigits();
   vector<string> ReadLineAsWords();
 
   vector<string> ReadLines();
 
-  vector<vector<int>> ReadDataAsMatrixOfNumbers();
-  vector<vector<int>> ReadDataAsMatrixOfDigits();
+  vector<vector<int>>    ReadDataAsMatrixOfNumbers();
+  vector<vector<int>>    ReadDataAsMatrixOfDigits();
   vector<vector<string>> ReadDataAsMatrixOfWords();
 
   //-----------------------------------------------------------
 
-  template<typename T = int>
+  template <typename T = int>
   vector<T> ReadDataAs()
   {
     vector<T> ret;
@@ -43,13 +43,13 @@ public:
     return ret;
   }
 
-  template<typename T = int>
+  template <typename T = int>
   vector<T> ReadDataSeparatedByCharAs()
   {
     vector<T> ret;
     while (mFileStream.good())
     {
-      T x{};
+      T    x{};
       char _{};
 
       mFileStream >> x >> _;
@@ -61,5 +61,4 @@ public:
 
 private:
   ifstream & mFileStream;
-
 };

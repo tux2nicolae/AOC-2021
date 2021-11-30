@@ -150,4 +150,3 @@ AOC::Point AOC::Ship::GetLeft(long long step)
 {
   return GetRight(-step);
 }
-

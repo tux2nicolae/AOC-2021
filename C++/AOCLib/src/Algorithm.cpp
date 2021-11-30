@@ -12,7 +12,7 @@
 
 namespace AOC::detail
 {
-  vector<vector<long long>> FibonaciMatrix(long long n, long long modulo);
+vector<vector<long long>> FibonaciMatrix(long long n, long long modulo);
 }
 
 //--------------------------------------------------------------------------
@@ -42,11 +42,12 @@ long long AOC::Fibonaci(long long n, long long modulo)
 std::vector<bool> AOC::Eratosthenes(size_t n)
 {
   vector<bool> sieve;
-  sieve.resize(n + 1); // + 1 for n
+  sieve.resize(n + 1);  // + 1 for n
 
   for (int i = 2; i <= sqrt(n); i++)
   {
-    while (sieve[i]) i++;
+    while (sieve[i])
+      i++;
 
     for (int j = i * i; j <= n; j += i)
       sieve[j] = true;
@@ -65,19 +66,18 @@ tuple<int, int, int> AOC::SubsequenceOfLargestSum(const vector<int> & sequence)
   sums.reserve(sequence.size() + 1);
   sums.push_back(0);
 
-  std::partial_sum(sequence.begin(), sequence.end(),
-    back_inserter(sums));
+  std::partial_sum(sequence.begin(), sequence.end(), back_inserter(sums));
 
-  int smax = std::numeric_limits<int>::min();
+  int smax      = std::numeric_limits<int>::min();
   int smaxbegin = 0, smaxend = 0;
 
   for (int beg = 0, end = 1; end < sums.size(); ++end)
   {
     if (sums[end] - sums[beg] > smax)
     {
-      smax = sums[end] - sums[beg];
+      smax      = sums[end] - sums[beg];
       smaxbegin = beg;
-      smaxend = end;
+      smaxend   = end;
     }
 
     // longest or shortest <=
@@ -88,29 +88,29 @@ tuple<int, int, int> AOC::SubsequenceOfLargestSum(const vector<int> & sequence)
   return make_tuple(smax, smaxbegin, smaxend);
 }
 
-vector<long long> AOC::GetPartialSums(const vector<long long>& sequence)
+vector<long long> AOC::GetPartialSums(const vector<long long> & sequence)
 {
-    vector<long long> sums;
-    sums.reserve(sequence.size());
+  vector<long long> sums;
+  sums.reserve(sequence.size());
 
-    std::partial_sum(sequence.begin(), sequence.end(),
-        back_inserter(sums));
+  std::partial_sum(sequence.begin(), sequence.end(), back_inserter(sums));
 
-    return sums;
+  return sums;
 }
 
 long long AOC::ManhattenDistance(long long x1, long long y1, long long x2, long long y2)
 {
-    return Abs(x1 - x2) + Abs(y1 - y2);
+  return Abs(x1 - x2) + Abs(y1 - y2);
 }
 
-long long AOC::ManhattenDistance(const Point& a, const Point& b)
+long long AOC::ManhattenDistance(const Point & a, const Point & b)
 {
-    return AOC::ManhattenDistance(a.x, a.y, b.x, b.y);
+  return AOC::ManhattenDistance(a.x, a.y, b.x, b.y);
 }
 
-
-vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & first, const vector<vector<long long>> & second, long long modulo)
+vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & first,
+                                              const vector<vector<long long>> & second,
+                                              long long                         modulo)
 {
   assert(first.size() != 0);
   assert(first.size() == second.size());
@@ -124,7 +124,7 @@ vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & 
 
   //------------------------------------------------------------------------
 
-  size_t matrixSize = first.size();
+  size_t                    matrixSize = first.size();
   vector<vector<long long>> temp;
 
   temp.resize(matrixSize);
@@ -145,20 +145,21 @@ vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & 
   return temp;
 }
 
-pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point>& aCoordonates, vector<vector<int>>& aMap)
+pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point> & aCoordonates,
+                                             vector<vector<int>> & aMap)
 {
   set<int> infinitePoints;
 
   vector<vector<int>> distances;
   distances.resize(aMap.size());
-  for (auto& line : distances)
+  for (auto & line : distances)
     line.resize(aMap[0].size());
 
   queue<Point> unvisited;
-  for (const auto& startingPoint : aCoordonates)
+  for (const auto & startingPoint : aCoordonates)
     unvisited.push(startingPoint);
 
-  auto isInBoundary = [&](const Point& to)-> bool
+  auto isInBoundary = [&](const Point & to) -> bool
   {
     return !(to.x < 0 || to.y < 0 || to.x >= aMap.size() || to.y >= aMap[0].size());
   };
@@ -172,8 +173,8 @@ pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point>& aCoordonates, 
     if (aMap[from.x][from.y] == -1)
       continue;
 
-    static const int directionX[4] = { -1,  0, 1, 0 };
-    static const int directionY[4] = { 0,  1, 0, -1 };
+    static const int directionX[4] = { -1, 0, 1, 0 };
+    static const int directionY[4] = { 0, 1, 0, -1 };
 
     for (int i = 0; i < 4; ++i)
     {
@@ -189,13 +190,14 @@ pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point>& aCoordonates, 
 
       if (aMap[to.x][to.y])
       {
-        if (distances[to.x][to.y] == distances[from.x][from.y] + 1 && aMap[from.x][from.y] != aMap[to.x][to.y])
+        if (distances[to.x][to.y] == distances[from.x][from.y] + 1 &&
+            aMap[from.x][from.y] != aMap[to.x][to.y])
           aMap[to.x][to.y] = -1;
 
         continue;
       }
 
-      aMap[to.x][to.y] = aMap[from.x][from.y];
+      aMap[to.x][to.y]      = aMap[from.x][from.y];
       distances[to.x][to.y] = distances[from.x][from.y] + 1;
 
       unvisited.push(to);
@@ -210,27 +212,27 @@ pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point>& aCoordonates, 
 
 namespace AOC::detail
 {
-  vector<vector<long long>> FibonaciMatrix(long long n, long long modulo)
+vector<vector<long long>> FibonaciMatrix(long long n, long long modulo)
+{
+  static const vector<vector<long long>> kFibonaci{ { 0, 1 }, { 1, 1 } };
+
+  if (n == 0)
   {
-    static const vector<vector<long long>> kFibonaci{ {0, 1}, {1, 1} };
+    return { { 1, 0 }, { 0, 1 } };
+  }
+  else if (n == 1)
+  {
+    return kFibonaci;
+  }
 
-    if (n == 0)
-    {
-      return { {1, 0}, {0, 1} };
-    }
-    else if (n == 1)
-    {
-      return kFibonaci;
-    }
-
-    auto result = FibonaciMatrix(n / 2, modulo);
-    if (n % 2 == 0)
-    {
-      return AOC::MultiplyMatrix(result, result, modulo);
-    }
-    else
-    {
-      return AOC::MultiplyMatrix(AOC::MultiplyMatrix(result, result, modulo), kFibonaci, modulo);
-    }
+  auto result = FibonaciMatrix(n / 2, modulo);
+  if (n % 2 == 0)
+  {
+    return AOC::MultiplyMatrix(result, result, modulo);
+  }
+  else
+  {
+    return AOC::MultiplyMatrix(AOC::MultiplyMatrix(result, result, modulo), kFibonaci, modulo);
   }
 }
+}  // namespace AOC::detail

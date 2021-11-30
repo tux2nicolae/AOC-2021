@@ -5,15 +5,15 @@
 #include "pch.h"
 #include "FStreamReader.h"
 
-FStreamReader::FStreamReader(ifstream & aIn) 
+FStreamReader::FStreamReader(ifstream & aIn)
   : mFileStream(aIn)
 {
   assert(mFileStream.good());
 }
 
-bool FStreamReader::IsValid() 
-{ 
-  return mFileStream.good(); 
+bool FStreamReader::IsValid()
+{
+  return mFileStream.good();
 }
 
 vector<int> FStreamReader::ReadLineAsNumbers()
@@ -72,7 +72,6 @@ vector<string> FStreamReader::ReadLineAsWords()
   return ret;
 }
 
-
 vector<string> FStreamReader::ReadLines()
 {
   vector<string> ret;
@@ -84,7 +83,6 @@ vector<string> FStreamReader::ReadLines()
   return ret;
 }
 
-
 vector<vector<int>> FStreamReader::ReadDataAsMatrixOfNumbers()
 {
   vector<vector<int>> ret;
@@ -92,8 +90,7 @@ vector<vector<int>> FStreamReader::ReadDataAsMatrixOfNumbers()
   string line;
   while (getline(mFileStream, line))
   {
-
-    vector<int> row;
+    vector<int>        row;
     std::istringstream ss(line);
 
     int n = 0;
