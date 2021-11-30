@@ -10,9 +10,14 @@ namespace AOC
 
   long long Abs(long long number);
 
-  long long ManhattenDistance(long long x1, long long y1, long long x2, long long y2);
-  long long ManhattenDistance(const Point & a, const Point& b);
+  /**
+   * Only coprime numbers (numbers that share no prime factors)
+   */
+  long long InvModulo(long long n, long long modulo);
 
-  long long Cmmdc(long long n, long long m);
-  long long Cmmmc(long long n, long long m);
+  long long PowModulo(long long a, long long b, long long modulo);
+  long long MultiplyModulo(long long a, long long b, long long modulo);
+
+  vector<vector<long long>> MultiplyMatrix(const vector<vector<long long>>& first,
+      const vector<vector<long long>>& second, long long modulo);
 }

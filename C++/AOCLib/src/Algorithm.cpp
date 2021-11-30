@@ -17,6 +17,19 @@ namespace AOC::detail
 
 //--------------------------------------------------------------------------
 
+long long AOC::Cmmdc(long long n, long long m)
+{
+  if (n == 0)
+    return m;
+
+  return Cmmdc(m % n, n);
+}
+
+long long AOC::Cmmmc(long long n, long long m)
+{
+  return (n * m) / Cmmdc(n, m);
+}
+
 long long AOC::Fibonaci(long long n, long long modulo)
 {
   if (n == 0)
@@ -40,17 +53,6 @@ std::vector<bool> AOC::Eratosthenes(size_t n)
   }
 
   return sieve;
-}
-
-vector<long long> AOC::GetPartialSums(const vector<long long>& sequence)
-{
-  vector<long long> sums;
-  sums.reserve(sequence.size());
-
-  std::partial_sum(sequence.begin(), sequence.end(),
-    back_inserter(sums));
-
-  return sums;
 }
 
 tuple<int, int, int> AOC::SubsequenceOfLargestSum(const vector<int> & sequence)
@@ -86,23 +88,27 @@ tuple<int, int, int> AOC::SubsequenceOfLargestSum(const vector<int> & sequence)
   return make_tuple(smax, smaxbegin, smaxend);
 }
 
-long long AOC::MultiplyModulo(long long a, long long b, long long modulo)
+vector<long long> AOC::GetPartialSums(const vector<long long>& sequence)
 {
-	long long res = 0;
+    vector<long long> sums;
+    sums.reserve(sequence.size());
 
-	a %= modulo;
+    std::partial_sum(sequence.begin(), sequence.end(),
+        back_inserter(sums));
 
-	while (b)
-	{
-		if (b % 2 == 1)
-			res = (res + a) % modulo;
-
-		a = (2 * a) % modulo;
-		b = b / 2;
-	}
-
-	return res;
+    return sums;
 }
+
+long long AOC::ManhattenDistance(long long x1, long long y1, long long x2, long long y2)
+{
+    return Abs(x1 - x2) + Abs(y1 - y2);
+}
+
+long long AOC::ManhattenDistance(const Point& a, const Point& b)
+{
+    return AOC::ManhattenDistance(a.x, a.y, b.x, b.y);
+}
+
 
 vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & first, const vector<vector<long long>> & second, long long modulo)
 {
@@ -137,34 +143,6 @@ vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & 
   }
 
   return temp;
-}
-
-long long AOC::PowModulo(long long a, long long b, long long modulo)
-{
-  if (a == 0)
-    return 0;
-
-  if (b == 0)
-    return 1;
-
-  if (b % 2 == 0) {
-    long long half = PowModulo(a, b / 2, modulo);
-    return AOC::MultiplyModulo(half, half, modulo);
-  }
-  else {
-    long long previousPower = PowModulo(a, b - 1, modulo);
-    return AOC::MultiplyModulo(previousPower, a, modulo);
-  }
-}
-
-long long AOC::InvMod(long long n, long long modulo)
-{
-  n = n % modulo;
-  for (long long x = 1; x < modulo; x++)
-    if (MultiplyModulo(n, x, modulo) == 1)
-      return x;
-
-  return 0;
 }
 
 pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point>& aCoordonates, vector<vector<int>>& aMap)

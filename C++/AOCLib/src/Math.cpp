@@ -11,25 +11,48 @@ long long AOC::Abs(long long number)
   return number > 0 ? number : -number;
 }
 
-long long AOC::ManhattenDistance(long long x1, long long y1, long long x2, long long y2)
+long long AOC::InvModulo(long long n, long long modulo)
 {
-  return Abs(x1 - x2) + Abs(y1 - y2);
+    n = n % modulo;
+    for (long long x = 1; x < modulo; x++)
+        if (MultiplyModulo(n, x, modulo) == 1)
+            return x;
+
+    return 0;
 }
 
-long long AOC::ManhattenDistance(const Point& a, const Point& b)
+long long AOC::PowModulo(long long a, long long b, long long modulo)
 {
-  return AOC::ManhattenDistance(a.x, a.y, b.x, b.y);
+    if (a == 0)
+        return 0;
+
+    if (b == 0)
+        return 1;
+
+    if (b % 2 == 0) {
+        long long half = PowModulo(a, b / 2, modulo);
+        return AOC::MultiplyModulo(half, half, modulo);
+    }
+    else {
+        long long previousPower = PowModulo(a, b - 1, modulo);
+        return AOC::MultiplyModulo(previousPower, a, modulo);
+    }
 }
 
-long long AOC::Cmmdc(long long n, long long m)
+long long AOC::MultiplyModulo(long long a, long long b, long long modulo)
 {
-  if (n == 0)
-    return m;
+    long long res = 0;
 
-  return Cmmdc(m % n, n);
-}
+    a %= modulo;
 
-long long AOC::Cmmmc(long long n, long long m)
-{
-  return (n * m) / Cmmdc(n, m);
+    while (b)
+    {
+        if (b % 2 == 1)
+            res = (res + a) % modulo;
+
+        a = (2 * a) % modulo;
+        b = b / 2;
+    }
+
+    return res;
 }
