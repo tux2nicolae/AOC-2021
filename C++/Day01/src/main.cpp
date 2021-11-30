@@ -31,6 +31,16 @@ int main()
   FStreamReader reader(in);
   vector<int>   v = reader.ReadDataAs<int>();
 
+  int sum = 0;
+  for (int i = 0; i < v.size(); i++)
+  {
+    auto x = v[i];
+
+    sum += x;
+  }
+
+  cout << sum;
+
   // out
   // FStreamWriter writer(out);
   // writer.WriteVector(v);
