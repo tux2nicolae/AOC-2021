@@ -128,7 +128,7 @@ void AOC::Ship::MoveWest(long long step)
 AOC::Point AOC::Ship::GetFront(long long step)
 {
   AOC::Ship front = *this;
-  front.MoveForward(step);
+  front.GoForward(step);
 
   return front.GetPosition();
 }
@@ -141,7 +141,7 @@ AOC::Point AOC::Ship::GetBack(long long step)
 AOC::Point AOC::Ship::GetRight(long long step)
 {
   AOC::Ship right = *this;
-  right.MoveRight(step);
+  right.GoRight(step);
 
   return right.GetPosition();
 }
