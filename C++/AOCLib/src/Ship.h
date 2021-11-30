@@ -20,10 +20,10 @@ namespace AOC
     void TurnRight();
 
     // changes the direction
-    void MoveForward(long long step = 1);
-    void MoveBackward(long long step = 1);
-    void MoveRight(long long step = 1);
-    void MoveLeft(long long step = 1);
+    void GoForward(long long step = 1);
+    void GoBackward(long long step = 1);
+    void GoRight(long long step = 1);
+    void GoLeft(long long step = 1);
 
     // without changing direction
     void MoveNorth(long long step = 1);

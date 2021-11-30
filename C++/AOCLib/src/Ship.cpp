@@ -68,7 +68,7 @@ void AOC::Ship::TurnRight()
   }
 }
 
-void AOC::Ship::MoveForward(long long step)
+void AOC::Ship::GoForward(long long step)
 {
   if (direction == '^')
   {
@@ -88,21 +88,21 @@ void AOC::Ship::MoveForward(long long step)
   }
 }
 
-void AOC::Ship::MoveBackward(long long step)
+void AOC::Ship::GoBackward(long long step)
 {
-  MoveForward(-step);
+  GoForward(-step);
 }
 
-void AOC::Ship::MoveRight(long long step)
+void AOC::Ship::GoRight(long long step)
 {
   TurnRight();
-  MoveForward(step);
+  GoForward(step);
 }
 
-void AOC::Ship::MoveLeft(long long step)
+void AOC::Ship::GoLeft(long long step)
 {
   TurnLeft();
-  MoveForward(step);
+  GoForward(step);
 }
 
 void AOC::Ship::MoveNorth(long long step)
