@@ -161,7 +161,8 @@ pair<vector<vector<int>>, set<int>> AOC::Lee(const vector<Point> & aCoordonates,
 
   auto isInBoundary = [&](const Point & to) -> bool
   {
-    return !(to.x < 0 || to.y < 0 || to.x >= aMap.size() || to.y >= aMap[0].size());
+    return !(to.x < 0 || to.y < 0 || to.x >= static_cast<int>(aMap.size()) ||
+             to.y >= static_cast<int>(aMap[0].size()));
   };
 
   // run
