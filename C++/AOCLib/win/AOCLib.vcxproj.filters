@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{426f22bb-5e34-4e74-8b52-74b941ef6852}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Algorithm.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FStreamReader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FStreamWriter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Math.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\src\Parse.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Point.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Ship.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Util.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Algorithm.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FStreamReader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FStreamWriter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Time.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="..\src\Parse.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AOCLib.h" />
+    <ClInclude Include="..\src\Examples.h" />
+    <ClInclude Include="..\src\Point.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Ship.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Util.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
