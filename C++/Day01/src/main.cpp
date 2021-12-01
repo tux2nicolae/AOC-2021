@@ -31,15 +31,23 @@ int main()
   FStreamReader reader(in);
   vector<int>   v = reader.ReadDataAs<int>();
 
-  int sum = 0;
-  for (int i = 0; i < v.size(); i++)
+  // part 1
+  int part1 = 0;
+  for (int i = 1; i < v.size(); i++)
   {
-    auto x = v[i];
-
-    sum += x;
+    if (v[i - 1] < v[i])
+      part1++;
   }
 
-  cout << sum;
+  // part 2
+  int part2 = 0;
+  for (int i = 3; i < v.size(); i++)
+  {
+    if (v[i - 1] + v[i - 2] + v[i - 3] < v[i] + v[i - 1] + v[i - 2])
+      part2++;
+  }
+
+  cout << part1 << " " << part2;
 
   // out
   // FStreamWriter writer(out);
