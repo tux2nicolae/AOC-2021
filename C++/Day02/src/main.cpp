@@ -22,6 +22,7 @@ using namespace std;
 #include "../../AOCLib/src/FStreamWriter.h"
 #include "../../AOCLib/src/Math.h"
 #include "../../AOCLib/src/Time.h"
+#include "../../AOCLib/src/Parse.h"
 
 int main()
 {
@@ -29,7 +30,33 @@ int main()
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  vector<int>   v = reader.ReadDataAs<int>();
+  auto   v = reader.ReadLines();
+
+  int horisontal = 0;
+  int depth = 0;
+
+  // part 2
+  int aim = 0;
+  for (auto line : v)
+  {
+    string direction;
+    int value;
+
+    stringstream ss(line);
+    ss >> direction >> value;
+
+    if (direction == "forward") {
+      horisontal += value;
+      depth += value * aim;
+    }
+    else if (direction == "down")
+      aim += value;
+    else if (direction == "up")
+      aim -= value;
+  }
+
+  cout << depth * horisontal;
+
 
   // out
   // FStreamWriter writer(out);
