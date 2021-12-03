@@ -12,6 +12,8 @@ vector<string> Explode(const string & str, const string & regexSeparator);
 int            ExtractInt(const string & str, const string & regexStr = "(.*)");
 vector<string> ExtractMatches(const string & str, const string & regexStr = "(.*)");
 
+int BinaryStringToInt(const string & binaryValue);
+
 // previous rexec expresions
 //
 // [a-f0-9]{5}

@@ -4,6 +4,7 @@
  */
 #include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -21,14 +22,10 @@ using namespace std;
 #include "../../AOCLib/src/FStreamReader.h"
 #include "../../AOCLib/src/FStreamWriter.h"
 #include "../../AOCLib/src/Math.h"
+#include "../../AOCLib/src/Parse.h"
 #include "../../AOCLib/src/Time.h"
 
-int BinaryStringToInt(const string & binaryValue)
-{
-  return stoi(binaryValue, 0, 2);
-};
-
-pair<vector<int>, vector<int>> ComputeFrequencies(vector<string> & numbers)
+pair<vector<int>, vector<int>> ComputeFrequencies(const vector<string> & numbers)
 {
   vector<int> frequency0;
   vector<int> frequency1;
@@ -50,49 +47,44 @@ pair<vector<int>, vector<int>> ComputeFrequencies(vector<string> & numbers)
   return make_pair(frequency0, frequency1);
 }
 
-int FindGenerator(vector<string> numbers)
+int Find(vector<string> numbers, function<bool(int, int)> excludeCriteria)
 {
   for (int i = 0; i < numbers[0].size(); i++)
   {
     auto [frequency0, frequency1] = ComputeFrequencies(numbers);
 
-    auto mostFrequent = (frequency1[i] >= frequency0[i]) ? '1' : '0';
+    auto exclude = excludeCriteria(frequency0[i], frequency1[i]);
 
     numbers.erase(std::remove_if(numbers.begin(), numbers.end(),
                                  [=](const string & number)
                                  {
-                                   return number[i] != mostFrequent;
+                                   return number[i] == (exclude ? '1' : '0');
                                  }),
                   numbers.end());
 
     if (numbers.size() == 1)
-      return BinaryStringToInt(numbers[0]);
+      return AOC::BinaryStringToInt(numbers[0]);
   }
 
   return -1;
 }
 
-int FindScrubber(vector<string> numbers)
+int FindGenerator(const vector<string> & numbers)
 {
-  int scrubber = 0;
-  for (int i = 0; i < numbers[0].size(); i++)
-  {
-    auto [frequency0, frequency1] = ComputeFrequencies(numbers);
+  return Find(numbers,
+              [](int frequency0, int frequency1)
+              {
+                return frequency0 > frequency1;
+              });
+}
 
-    auto lessFrequent = (frequency1[i] < frequency0[i]) ? '1' : '0';
-
-    numbers.erase(std::remove_if(numbers.begin(), numbers.end(),
-                                 [=](const string & number)
-                                 {
-                                   return number[i] != lessFrequent;
-                                 }),
-                  numbers.end());
-
-    if (numbers.size() == 1)
-      return BinaryStringToInt(numbers[0]);
-  }
-
-  return -1;
+int FindScrubber(const vector<string> & numbers)
+{
+  return Find(numbers,
+              [](int frequency0, int frequency1)
+              {
+                return frequency0 <= frequency1;
+              });
 }
 
 int main()

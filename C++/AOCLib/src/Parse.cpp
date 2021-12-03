@@ -45,3 +45,8 @@ vector<string> AOC::ExtractMatches(const string & str, const string & regexStr)
 
   return { matches.begin(), matches.end() };
 }
+
+int AOC::BinaryStringToInt(const string& binaryValue)
+{
+    return stoi(binaryValue, 0, 2);
+}
