@@ -2,19 +2,18 @@
  * Advent of code 2021
  * @author : Nicolae Telechi
  */
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <memory>
 #include <algorithm>
-#include <vector>
-#include <sstream>
 #include <fstream>
+#include <iostream>
 #include <map>
-#include <set>
-#include <unordered_map>
-#include <optional>
+#include <memory>
 #include <numeric>
+#include <optional>
+#include <set>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -24,24 +23,76 @@ using namespace std;
 #include "../../AOCLib/src/Math.h"
 #include "../../AOCLib/src/Time.h"
 
-void ComputeFrequencies(vector<vector<int>> & v, vector<int> & frequency0, vector<int> & frequency1)
+int BinaryStringToInt(const string & binaryValue)
 {
-  frequency0.clear();
-  frequency1.clear();
+  return stoi(binaryValue, 0, 2);
+};
 
-  frequency0.resize(v[0].size());
-  frequency1.resize(v[0].size());
+pair<vector<int>, vector<int>> ComputeFrequencies(vector<string> & numbers)
+{
+  vector<int> frequency0;
+  vector<int> frequency1;
 
-  for (auto number : v)
+  frequency0.resize(numbers[0].size());
+  frequency1.resize(numbers[0].size());
+
+  for (auto bit : numbers)
   {
-    for (int i = 0; i < number.size(); i++)
+    for (int i = 0; i < bit.size(); i++)
     {
-      if (number[i] == 0)
+      if (bit[i] == '0')
         frequency0[i]++;
       else
         frequency1[i]++;
     }
   }
+
+  return make_pair(frequency0, frequency1);
+}
+
+int FindGenerator(vector<string> numbers)
+{
+  for (int i = 0; i < numbers[0].size(); i++)
+  {
+    auto [frequency0, frequency1] = ComputeFrequencies(numbers);
+
+    auto mostFrequent = (frequency1[i] >= frequency0[i]) ? '1' : '0';
+
+    numbers.erase(std::remove_if(numbers.begin(), numbers.end(),
+                                 [=](const string & number)
+                                 {
+                                   return number[i] != mostFrequent;
+                                 }),
+                  numbers.end());
+
+    if (numbers.size() == 1)
+      return BinaryStringToInt(numbers[0]);
+  }
+
+  return -1;
+}
+
+int FindScrubber(vector<string> numbers)
+{
+  int scrubber = 0;
+  for (int i = 0; i < numbers[0].size(); i++)
+  {
+    auto [frequency0, frequency1] = ComputeFrequencies(numbers);
+
+    auto lessFrequent = (frequency1[i] < frequency0[i]) ? '1' : '0';
+
+    numbers.erase(std::remove_if(numbers.begin(), numbers.end(),
+                                 [=](const string & number)
+                                 {
+                                   return number[i] != lessFrequent;
+                                 }),
+                  numbers.end());
+
+    if (numbers.size() == 1)
+      return BinaryStringToInt(numbers[0]);
+  }
+
+  return -1;
 }
 
 int main()
@@ -50,97 +101,31 @@ int main()
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  auto v = reader.ReadDataAsMatrixOfDigits();
+  auto          input = reader.ReadLines();
 
-  const int kLength = v[0].size();
-
-  vector<int> frequency0;
-  vector<int> frequency1;
-
-  ComputeFrequencies(v, frequency0, frequency1);
-
-  int gama = 0;
-  int epsilon = 0;
-  for (int i = 0; i < kLength; i++)
+  // part 1
   {
-    if (frequency1[i] > frequency0[i])
-    {
-      gama = (gama << 1) | 1;
-      epsilon <<= 1;
-    }
-    else
-    {
-      epsilon = (epsilon << 1) | 1;
-      gama <<= 1;
-    }
-  }
+    auto [frequency0, frequency1] = ComputeFrequencies(input);
 
-  cout << gama * epsilon << endl;
+    int gama    = 0;
+    int epsilon = 0;
+
+    for (int i = 0; i < frequency0.size(); i++)
+    {
+      gama    = (gama << 1) | (frequency1[i] > frequency0[i]);
+      epsilon = (epsilon << 1) | (frequency1[i] <= frequency0[i]);
+    }
+
+    cout << gama * epsilon << endl;
+  }
 
   // part 2
   {
-    auto allGenerators = v;
-
-    auto toDecimal = [=](const vector<int>& binaryValue)
-    {
-      int decimalValue = 0;
-      for (int i = 0; i < kLength; i++)
-      {
-        decimalValue = (decimalValue << 1) | binaryValue[i];
-      }
-
-      return decimalValue;
-    };
-
-    // xxx
-    int generator = 0;
-    for (int i = 0; i < kLength; i++)
-    {
-      int mostFrequent = (frequency1[i] >= frequency0[i]) ? 1 : 0;
-
-      allGenerators.erase(std::remove_if(allGenerators.begin(), allGenerators.end(), [=](vector<int>& x)
-      {
-        return x[i] != mostFrequent;
-      }), allGenerators.end());
-
-      ComputeFrequencies(allGenerators, frequency0, frequency1);
-
-      // found
-      if (allGenerators.size() == 1)
-      {
-        generator = toDecimal(allGenerators[0]);
-        break;
-      }
-    }
-
-    allGenerators = v;
-
-    int scrubber = 0;
-    for (int i = 0; i < kLength; i++)
-    {
-      int lessFrequent = (frequency1[i] < frequency0[i]) ? 1 : 0;
-
-      allGenerators.erase(std::remove_if(allGenerators.begin(), allGenerators.end(), [=](vector<int>& x)
-      {
-        return x[i] != lessFrequent;
-      }), allGenerators.end());
-
-      ComputeFrequencies(allGenerators, frequency0, frequency1);
-
-      // found
-      if (allGenerators.size() == 1)
-      {
-        scrubber = toDecimal(allGenerators[0]);
-        break;
-      }
-    }
+    int generator = FindGenerator(input);
+    int scrubber  = FindScrubber(input);
 
     cout << generator * scrubber;
   }
-
-  // out
-  // FStreamWriter writer(out);
-  // writer.WriteVector(v);
 
   return 0;
 }
