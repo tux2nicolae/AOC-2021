@@ -44,6 +44,30 @@ public:
   }
 
   template <typename T = int>
+  vector<T> ReadLineSeparatedByCharAs()
+  {
+    vector<T> ret;
+
+    string line;
+    if (!getline(mFileStream, line))
+      return ret;
+
+    std::istringstream ss(line);
+
+    while (ss.good())
+    {
+      T    x{};
+      char _{};
+
+      ss >> x >> _;
+      ret.push_back(x);
+    }
+
+    return ret;
+  }
+
+
+  template <typename T = int>
   vector<T> ReadDataSeparatedByCharAs()
   {
     vector<T> ret;
