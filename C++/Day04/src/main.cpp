@@ -84,7 +84,6 @@ struct Board
   };
 
   bool Valid() { return valid; }
-
   void Invalidate() { valid = false; };
 
   bool                      valid{ true };
@@ -102,9 +101,10 @@ int main()
   vector<int>   extracts = reader.ReadLineSeparatedByCharAs<int>();
   vector<Board> boards;
 
-  int                 iteration = 0;
-  vector<vector<int>> boardData;
+  int       iteration  = 0;
+  const int kBoardSize = 5;
 
+  vector<vector<int>> boardData;
   while (reader.IsValid())
   {
     auto dataLine = reader.ReadLineAsNumbers();
@@ -113,7 +113,7 @@ int main()
 
     boardData.push_back(dataLine);
 
-    if (++iteration % 5 == 0)
+    if (++iteration % kBoardSize == 0)
     {
       Board board;
       board.data = boardData;
@@ -123,8 +123,9 @@ int main()
     }
   }
 
-  // part 2
-  int score = 0;
+  optional<int> scorePart1;
+  int           scorePart2 = 0;
+
   for (int extract : extracts)
   {
     for (auto & board : boards)
@@ -133,17 +134,17 @@ int main()
 
       if (board.Valid() && board.HasWon())
       {
-        score = extract * board.GetScore();
+        if (!scorePart1)
+          scorePart1 = extract * board.GetScore();
+
+        scorePart2 = extract * board.GetScore();
         board.Invalidate();
       }
     }
   }
 
-  cout << score;
-
-  // out
-  // FStreamWriter writer(out);
-  // writer.WriteVector(v);
+  cout << *scorePart1 << endl;
+  cout << scorePart2;
 
   return 0;
 }
