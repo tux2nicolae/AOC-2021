@@ -20,18 +20,32 @@ bool AOC::Point::operator<(const Point & second) const
   return tie(x, y, z, w) < tie(second.x, second.y, second.z, second.w);
 }
 
+AOC::Point AOC::Point::operator+(const AOC::Point & second)
+{
+  AOC::Point newPosition = *this;
+
+  newPosition.x += second.x;
+  newPosition.y += second.y;
+  newPosition.z += second.z;
+  newPosition.w += second.w;
+
+  return newPosition;
+}
+
 AOC::Point & AOC::Point::operator+=(const AOC::Point & second)
 {
   x += second.x;
   y += second.y;
   z += second.z;
+  w += second.w;
 
   return *this;
 }
 
 bool AOC::Point::IsInBoundary(const Point & from, const Point & to)
 {
-  return (x >= from.x && y >= from.y && z >= from.z && x <= to.x && y <= to.y && z <= to.z);
+  return (x >= from.x && y >= from.y && z >= from.z && w >= from.w && x <= to.x && y <= to.y &&
+          z <= to.z && w <= to.w);
 }
 
 AOC::Point AOC::Point::GetLeft()

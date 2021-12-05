@@ -69,11 +69,11 @@ int main()
     values[to]++;
   }
 
-  int overlappedValues = count_if(begin(values), end(values),
-                                  [](auto & val)
-                                  {
-                                    return val.second >= 2;
-                                  });
+  auto overlappedValues = count_if(begin(values), end(values),
+                                   [](auto & val)
+                                   {
+                                     return val.second >= 2;
+                                   });
 
   cout << overlappedValues;
 
