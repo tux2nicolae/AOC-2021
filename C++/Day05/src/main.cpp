@@ -33,7 +33,7 @@ int main()
   FStreamReader reader(in);
   auto          v = reader.ReadLines();
 
-  map<AOC::Point, int> count;
+  map<AOC::Point, int> values;
 
   for (auto & line : v)
   {
@@ -49,47 +49,31 @@ int main()
       atoi(data[4].c_str()),
     };
 
-    // part 1
-    if (from.x == to.x || from.y == to.y)
+    AOC::Point step{ 0, 0 };
+
+    if (from.x < to.x)
+      step.x = 1;
+    else if (from.x > to.x)
+      step.x = -1;
+
+    if (from.y < to.y)
+      step.y = 1;
+    else if (from.y > to.y)
+      step.y = -1;
+
+    for (; from != to; from += step)
     {
-      for (int i = min(from.x, to.x); i <= max(from.x, to.x); i++)
-      {
-        for (int j = min(from.y, to.y); j <= max(from.y, to.y); j++)
-        {
-          count[AOC::Point{ i, j }]++;
-        }
-      }
+      values[from]++;
     }
-    // part 2
-    else
-    {
-      AOC::Point step{ 0, 0 };
 
-      if (from.x < to.x)
-        step.x = 1;
-      else
-        step.x = -1;
-
-      if (from.y < to.y)
-        step.y = 1;
-      else
-        step.y = -1;
-
-      for (int i = from.x, j = from.y; i != to.x && j != to.y; i += step.x, j += step.y)
-      {
-        count[AOC::Point{ i, j }]++;
-      }
-
-      count[to]++;
-    }
+    values[to]++;
   }
 
-  int overlappedValues = 0;
-  for (auto & [_, val] : count)
-  {
-    if (val >= 2)
-      overlappedValues++;
-  }
+  int overlappedValues = count_if(begin(values), end(values),
+                                  [](auto & val)
+                                  {
+                                    return val.second >= 2;
+                                  });
 
   cout << overlappedValues;
 

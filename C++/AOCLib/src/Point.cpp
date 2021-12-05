@@ -10,6 +10,11 @@ bool AOC::Point::operator==(const Point & second) const
   return tie(x, y, z, w) == tie(second.x, second.y, second.z, second.w);
 }
 
+bool AOC::Point::operator!=(const Point & second) const
+{
+  return !operator==(second);
+}
+
 bool AOC::Point::operator<(const Point & second) const
 {
   return tie(x, y, z, w) < tie(second.x, second.y, second.z, second.w);
