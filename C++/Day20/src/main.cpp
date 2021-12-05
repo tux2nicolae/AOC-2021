@@ -2,19 +2,19 @@
  * Advent of code 2021
  * @author : Nicolae Telechi
  */
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <memory>
 #include <algorithm>
-#include <vector>
-#include <sstream>
 #include <fstream>
+#include <functional>
+#include <iostream>
 #include <map>
-#include <set>
-#include <unordered_map>
-#include <optional>
+#include <memory>
 #include <numeric>
+#include <optional>
+#include <set>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -22,8 +22,10 @@ using namespace std;
 #include "../../AOCLib/src/FStreamReader.h"
 #include "../../AOCLib/src/FStreamWriter.h"
 #include "../../AOCLib/src/Math.h"
+#include "../../AOCLib/src/Parse.h"
+#include "../../AOCLib/src/Point.h"
+#include "../../AOCLib/src/Ship.h"
 #include "../../AOCLib/src/Time.h"
-
 
 int main()
 {
@@ -31,7 +33,7 @@ int main()
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  vector<int> v = reader.ReadDataAs<int>();
+  auto          input = reader.ReadDataAs<int>();
 
   // out
   // FStreamWriter writer(out);
