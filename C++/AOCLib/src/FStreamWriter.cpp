@@ -19,6 +19,14 @@ void FStreamWriter::WriteVector(const vector<int> & aVector)
   }
 }
 
+void FStreamWriter::WriteList(const list<int> & aVector)
+{
+  for (const auto & element : aVector)
+  {
+    mFileStream << element << " ";
+  }
+}
+
 void FStreamWriter::WriteMatrix(const vector<vector<int>> & aMatrix)
 {
   for (const auto & row : aMatrix)

@@ -44,6 +44,18 @@ public:
   }
 
   template <typename T = int>
+  list<T> ReadDataAsListOf()
+  {
+    list<T> ret;
+
+    T n = 0;
+    while (mFileStream >> n)
+      ret.push_back(n);
+
+    return ret;
+  }
+
+  template <typename T = int>
   vector<T> ReadLineSeparatedByCharAs()
   {
     vector<T> ret;
@@ -65,7 +77,6 @@ public:
 
     return ret;
   }
-
 
   template <typename T = int>
   vector<T> ReadDataSeparatedByCharAs()

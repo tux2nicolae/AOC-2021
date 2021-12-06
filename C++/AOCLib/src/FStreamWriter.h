@@ -13,6 +13,7 @@ public:
   FStreamWriter(ofstream & aOut);
 
   void WriteVector(const vector<int> & aVector);
+  void WriteList(const list<int> & aVector);
   void WriteMatrix(const vector<vector<int>> & aMatrix);
   void WriteMatrixAsGrid(const vector<vector<int>> & aMatrix);
 
