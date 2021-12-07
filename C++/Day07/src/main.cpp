@@ -33,7 +33,25 @@ int main()
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  auto          input = reader.ReadDataAs<int>();
+  auto          input = reader.ReadDataSeparatedByCharAs<int>();
+
+  int minFuel = numeric_limits<int>::max();
+
+  for (int target = 0; target <= *max_element(begin(input), end(input)); target++)
+  {
+    int s = 0;
+    for (auto crab : input)
+    {
+      long long distance = abs(crab - target);
+      long long fuel     = (distance * (distance + 1)) / 2;
+
+      s += fuel;
+    }
+
+    minFuel = min(minFuel, s);
+  }
+
+  cout << minFuel;
 
   // out
   // FStreamWriter writer(out);
