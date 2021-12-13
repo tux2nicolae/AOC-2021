@@ -225,9 +225,9 @@ void AOC::Point::RotateRight(const Point & origin)
 void AOC::Point::RotateLeft(const Point & origin)
 {
   // 270 degree right rotation
-  RotateRight();
-  RotateRight();
-  RotateRight();
+  RotateRight(origin);
+  RotateRight(origin);
+  RotateRight(origin);
 }
 
 //------------------------------------------------------------
