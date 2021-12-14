@@ -15,7 +15,7 @@ void FStreamWriter::WriteVector(const vector<int> & aVector)
 {
   for (const auto & element : aVector)
   {
-    mFileStream << element << endl;
+    mFileStream << element << " ";
   }
 }
 
