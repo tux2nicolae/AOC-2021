@@ -39,72 +39,63 @@ int main()
   getline(in, polymer);
   getline(in, _);
 
-  auto input = reader.ReadLines();
+  unordered_map<string, string>         toChar;
+  unordered_map<string, vector<string>> toPairs;
 
-  map<string, int> prevInsertionsCount;
-
-  int n = 20;
-  while (n--)
+  for (auto line : reader.ReadLines())
   {
-    map<string, int> insertionsCount;
-    map<int, string> insertions;
-    for (auto line : input)
-    {
-      auto matches = AOC::ExtractMatches(line, "(.*) -> (.*)");
-      assert(matches.size() == 3);
+    assert(!line.empty());
 
-      auto from = matches[1];
-      auto to   = matches[2];
+    auto matches = AOC::ExtractMatches(line, "(.*) -> (.*)");
+    assert(matches.size() == 3);
 
-      auto pos = polymer.find(from, 0);
-      while (pos != string::npos)
-      {
-        insertions[pos] = to;
-        insertionsCount[to]++;
+    auto from = matches[1];
+    auto to   = matches[2];
 
-        pos = polymer.find(from, pos + 1);
-      }
-    }
+    auto toFirst  = string(1, from[0]) + to;
+    auto toSecond = to + string(1, from[1]);
 
-    out << "Total :" << insertions.size() << endl;
-    for (auto [_, freqency] : insertionsCount)
-    {
-      out << prevInsertionsCount[_] * 2 - freqency << " ";
-    }
+    toPairs[from].push_back(toFirst);
+    toPairs[from].push_back(toSecond);
 
-    prevInsertionsCount = insertionsCount;
-    out << endl;
-
-    for (auto it = insertions.rbegin(); it != insertions.rend(); it++)
-    {
-      auto & [pos, to] = *it;
-      polymer.insert(pos + 1, to);
-    }
-
-    out << polymer << endl;
-
-    map<char, int> freq;
-    for (auto c : polymer)
-      freq[c]++;
-
-    // FC
-
-    vector<int> frequencies;
-    // for (auto [_, freqency] : freq)
-    //{
-    //   out << _ << "(" << freqency << ") ";
-    //   frequencies.push_back(freqency);
-    // }
-
-    sort(begin(frequencies), end(frequencies));
-
-    FStreamWriter writer(out);
-    // writer.WriteVector(frequencies);
-    out << endl;
-
-    // auto [minElement, maxElement] = minmax_element(begin(frequencies), end(frequencies));
-    // out << *minElement << " " << *maxElement << endl;
+    toChar[from] = to;
   }
+
+  unordered_map<string, long long> pairs;
+  for (int i = 0; i < polymer.size() - 1; i++)
+  {
+    pairs[string(1, polymer[i]) + string(1, polymer[i + 1])]++;
+  }
+
+  map<string, long long> totalCount;
+  for (auto c : polymer)
+  {
+    totalCount[string(1, c)]++;
+  }
+
+  for (int i = 0; i < 40; i++)
+  {
+    unordered_map<string, long long> newPairs;
+    for (auto [from, count] : pairs)
+    {
+      for (auto to : toPairs[from])
+      {
+        newPairs[to] += count;
+      }
+
+      totalCount[toChar[from]] += count;
+    }
+
+    pairs = newPairs;
+  }
+
+  auto [minElement, maxElement] = minmax_element(begin(totalCount), end(totalCount),
+                                                 [](auto a, auto b)
+                                                 {
+                                                   return a.second < b.second;
+                                                 });
+
+  cout << maxElement->second - minElement->second;
 
   return 0;
 }
