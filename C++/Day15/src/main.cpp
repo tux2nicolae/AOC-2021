@@ -43,11 +43,11 @@ vector<vector<int>> GetPart2Input(const vector<vector<int>> & input)
       }
 
       auto inputNumber = input[i % input.size()][j % input.size()];
-      auto tileNumber  = (i / input.size()) + (j / input.size());
+      auto tileNumber  = (i / (int)input.size()) + (j / (int)input.size());
 
       part2Input[i][j] = inputNumber + tileNumber;
-      if (part2Input[i][j] > 9)
-        part2Input[i][j] %= 9;
+      while (part2Input[i][j] > 9)
+        part2Input[i][j] -= 9;
     }
   }
 
@@ -59,13 +59,10 @@ vector<vector<int>> Run(vector<vector<int>> & aMap, AOC::Point startPoint, AOC::
   vector<vector<int>> costs(aMap.size(), vector<int>(aMap[0].size(), numeric_limits<int>::max()));
   costs[startPoint.x][startPoint.y] = 0;
 
-  auto heapComparator = [&](AOC::Point left, AOC::Point right)
+  auto heapComparator = [&](const AOC::Point & left, const AOC::Point & right)
   {
-    return costs[left.x][left.y] > costs[left.x][left.y];
+    return costs[left.x][left.y] > costs[right.x][right.y];
   };
-
-  set<AOC::Point> exists;
-  exists.insert(startPoint);
 
   priority_queue<AOC::Point, vector<AOC::Point>, decltype(heapComparator)> heap(heapComparator);
   heap.push(startPoint);
@@ -76,14 +73,14 @@ vector<vector<int>> Run(vector<vector<int>> & aMap, AOC::Point startPoint, AOC::
     auto from = heap.top();
     heap.pop();
 
-    for (auto to : from.GetAll2DNeighbours())
+    for (auto to : from.GetDirectNeighbours())
     {
       if (!to.IsInBoundary(startPoint, endPoint))
         continue;
 
       if (costs[from.x][from.y] + aMap[to.x][to.y] < costs[to.x][to.y])
       {
-        costs[to.x][to.y] = min(costs[from.x][from.y] + aMap[to.x][to.y], costs[to.x][to.y]);
+        costs[to.x][to.y] = costs[from.x][from.y] + aMap[to.x][to.y];
         heap.push(to);
       }
     }
