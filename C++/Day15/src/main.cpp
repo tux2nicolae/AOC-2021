@@ -28,24 +28,47 @@ using namespace std;
 #include "../../AOCLib/src/Ship.h"
 #include "../../AOCLib/src/Time.h"
 
-vector<vector<int>> Run(AOC::Point startPoint, vector<vector<int>> & aMap)
+vector<vector<int>> GetPart2Input(const vector<vector<int>> & input)
+{
+  vector<vector<int>> part2Input(input.size() * 5, vector<int>(input[0].size() * 5));
+
+  for (int i = 0; i < part2Input.size(); i++)
+  {
+    for (int j = 0; j < part2Input[0].size(); j++)
+    {
+      if (i < input.size() && j < input.size())
+      {
+        part2Input[i][j] = input[i][j];
+        continue;
+      }
+
+      auto inputNumber = input[i % input.size()][j % input.size()];
+      auto tileNumber  = (i / input.size()) + (j / input.size());
+
+      part2Input[i][j] = inputNumber + tileNumber;
+      if (part2Input[i][j] > 9)
+        part2Input[i][j] %= 9;
+    }
+  }
+
+  return part2Input;
+}
+
+vector<vector<int>> Run(vector<vector<int>> & aMap, AOC::Point startPoint, AOC::Point endPoint)
 {
   vector<vector<int>> costs(aMap.size(), vector<int>(aMap[0].size(), numeric_limits<int>::max()));
-  costs[0][0] = 0;
+  costs[startPoint.x][startPoint.y] = 0;
 
   auto heapComparator = [&](AOC::Point left, AOC::Point right)
   {
     return costs[left.x][left.y] > costs[left.x][left.y];
   };
 
+  set<AOC::Point> exists;
+  exists.insert(startPoint);
+
   priority_queue<AOC::Point, vector<AOC::Point>, decltype(heapComparator)> heap(heapComparator);
   heap.push(startPoint);
-
-  auto isInBoundary = [&](const AOC::Point & to) -> bool
-  {
-    return !(to.x < 0 || to.y < 0 || to.x >= static_cast<int>(aMap.size()) ||
-             to.y >= static_cast<int>(aMap[0].size()));
-  };
 
   // run
   while (!heap.empty())
@@ -53,19 +76,10 @@ vector<vector<int>> Run(AOC::Point startPoint, vector<vector<int>> & aMap)
     auto from = heap.top();
     heap.pop();
 
-    static const int directionX[4] = { -1, 0, 1, 0 };
-    static const int directionY[4] = { 0, 1, 0, -1 };
-
-    for (int i = 0; i < 4; ++i)
+    for (auto to : from.GetAll2DNeighbours())
     {
-      AOC::Point to;
-      to.x = from.x + directionX[i];
-      to.y = from.y + directionY[i];
-
-      if (!isInBoundary(to))
-      {
+      if (!to.IsInBoundary(startPoint, endPoint))
         continue;
-      }
 
       if (costs[from.x][from.y] + aMap[to.x][to.y] < costs[to.x][to.y])
       {
@@ -84,35 +98,16 @@ int main()
   ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  auto          input = reader.ReadDataAsMatrixOfDigits();
 
-  vector<vector<int>> part2Input(input.size() * 5, vector<int>(input[0].size() * 5));
+  auto input      = reader.ReadDataAsMatrixOfDigits();
+  auto part2Input = GetPart2Input(input);
 
-  for (int i = 0; i < part2Input.size(); i++)
-  {
-    for (int j = 0; j < part2Input[0].size(); j++)
-    {
-      if (i < input.size() && j < input.size())
-      {
-        part2Input[i][j] = input[i][j];
-        continue;
-      }
-
-      auto tileNumber = (i / input.size()) + (j / input.size());
-
-      part2Input[i][j] = (input[i % input.size()][j % input.size()] + tileNumber);
-      if (part2Input[i][j] > 9)
-      {
-        part2Input[i][j] %= 9;
-      }
-    }
-  }
-
-  auto result = Run({ AOC::Point{ 0, 0 } }, part2Input);
+  auto resultPart2 = Run(part2Input, AOC::Point{ 0, 0 },
+                         AOC::Point{ (int)part2Input.size() - 1, (int)part2Input.size() - 1 });
 
   // out
   FStreamWriter writer(out);
-  writer.WriteMatrix(result);
+  writer.WriteMatrix(resultPart2);
 
   return 0;
 }
