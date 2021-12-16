@@ -13,6 +13,12 @@ int            ExtractInt(const string & str, const string & regexStr = "(.*)");
 vector<string> ExtractMatches(const string & str, const string & regexStr = "(.*)");
 
 int BinaryStringToInt(const string & binaryValue);
+int BinaryStringToInt(string_view binaryValue);
+
+long long BinaryStringToLongLong(const string & binaryValue);
+long long BinaryStringToLongLong(string_view binaryValue);
+
+string GetBinaryStringFromHexString(string hex);
 
 // previous rexec expresions
 //

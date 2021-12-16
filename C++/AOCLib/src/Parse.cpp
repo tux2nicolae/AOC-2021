@@ -46,7 +46,83 @@ vector<string> AOC::ExtractMatches(const string & str, const string & regexStr)
   return { matches.begin(), matches.end() };
 }
 
-int AOC::BinaryStringToInt(const string& binaryValue)
+int AOC::BinaryStringToInt(string_view binaryValue)
 {
-    return stoi(binaryValue, 0, 2);
+  return stoi(string(binaryValue), 0, 2);
+}
+
+int AOC::BinaryStringToInt(const string & binaryValue)
+{
+  return stoi(binaryValue, 0, 2);
+}
+
+long long AOC::BinaryStringToLongLong(string_view binaryValue)
+{
+  return stoll(string(binaryValue), 0, 2);
+}
+
+long long AOC::BinaryStringToLongLong(const string & binaryValue)
+{
+  return stoll(binaryValue, 0, 2);
+}
+
+string AOC::GetBinaryStringFromHexString(string hex)
+{
+  string result = "";
+  for (auto c : hex)
+  {
+    switch (c)
+    {
+    case '0':
+      result.append("0000");
+      break;
+    case '1':
+      result.append("0001");
+      break;
+    case '2':
+      result.append("0010");
+      break;
+    case '3':
+      result.append("0011");
+      break;
+    case '4':
+      result.append("0100");
+      break;
+    case '5':
+      result.append("0101");
+      break;
+    case '6':
+      result.append("0110");
+      break;
+    case '7':
+      result.append("0111");
+      break;
+    case '8':
+      result.append("1000");
+      break;
+    case '9':
+      result.append("1001");
+      break;
+    case 'A':
+      result.append("1010");
+      break;
+    case 'B':
+      result.append("1011");
+      break;
+    case 'C':
+      result.append("1100");
+      break;
+    case 'D':
+      result.append("1101");
+      break;
+    case 'E':
+      result.append("1110");
+      break;
+    case 'F':
+      result.append("1111");
+      break;
+    }
+  }
+
+  return result;
 }
