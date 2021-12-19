@@ -182,8 +182,6 @@ map<AOC::Point, Metadata> GetScannersAround(const AOC::Point & beacon, const AOC
   return result;
 }
 
-map<AOC::Point, bool> allBeacons;
-
 void AlignScannersPositions(Scanner & scanner1, Scanner & scanner2)
 {
   if (!scanner1.position)
@@ -246,36 +244,12 @@ void AlignScannersPositions(Scanner & scanner1, Scanner & scanner2)
 
         beacon2.z += 2 * (scanner2.position->z - beacon2.z);
       }
-
-      cout << "--- scanner " << scanner2.scannerID << " --- (" << (*scanner2.position).x << ","
-           << (*scanner2.position).y << "," << (*scanner2.position).z << ")" << endl;
-
-      vector<AOC::Point> debug;
-      for (auto & beacon2 : scanner2.beacons)
-      {
-        debug.push_back(beacon2 - *scanner2.position);
-
-        AOC::Point test = debug.back();
-        cout << test.x << "," << test.y << "," << test.z << endl;
-
-        allBeacons[test] = true;
-      }
-
-      cout << endl;
     }
   }
 }
 
-map<int, vector<pair<int, AOC::Point>>> FindMatches(vector<Scanner> & scanners, ofstream & out)
+set<AOC::Point> DetectBeaconPositions(vector<Scanner> & scanners)
 {
-  int total = accumulate(begin(scanners), end(scanners), 0,
-                         [](long long acc, Scanner & scanner)
-                         {
-                           return acc + scanner.beacons.size();
-                         });
-
-  map<int, vector<pair<int, AOC::Point>>> matches;
-
   int n = 3;
   while (n--)
   {
@@ -289,41 +263,19 @@ map<int, vector<pair<int, AOC::Point>>> FindMatches(vector<Scanner> & scanners, 
         AlignScannersPositions(scanners[i], scanners[j]);
       }
     }
-
-    cout << "All beacons:" << allBeacons.size() << endl;
   }
 
-  for (auto & [id, edges] : matches)
+  // debug
+  set<AOC::Point> allBeacons;
+  for (auto & scanner : scanners)
   {
-    cout << id << ": ";
-    for (auto & edge : edges)
+    for (auto & beacon : scanner.beacons)
     {
-      cout << edge.first << " ";
-    }
-
-    cout << endl;
-  }
-
-  return matches;
-}
-
-void Solve(vector<Scanner> & scanners, map<int, vector<pair<int, AOC::Point>>> & graph)
-{
-  for (auto & [id, edges] : graph)
-  {
-    for (auto & [nextNodeId, position] : edges)
-    {
-      auto nextPosition = position;
-
-      assert(scanners[id].position);
-
-      nextPosition.x += nextPosition.x + scanners[id].position->x;
-      nextPosition.y += scanners[id].position->y;
-      nextPosition.z += scanners[id].position->z;
-
-      scanners[nextNodeId].position = nextPosition;
+      allBeacons.insert(beacon - *scanner.position);
     }
   }
+
+  return allBeacons;
 }
 
 int main()
@@ -369,11 +321,14 @@ int main()
   // put first scanner position as { 0, 0, 0}
   scanners[0].position = { 0, 0, 0 };
 
-  for (auto beacon : scanners[0].beacons)
-    allBeacons[beacon] = true;
+  auto allBeacons = DetectBeaconPositions(scanners);
+  cout << "All beacons:" << allBeacons.size() << endl;
 
-  auto graph = FindMatches(scanners, out);
-  Solve(scanners, graph);
+  // debug output
+  for (auto & beacon : allBeacons)
+  {
+    out << beacon.x << "," << beacon.y << "," << beacon.z << endl;
+  }
 
   // part 2
   long long maxDistance = 0;
@@ -386,18 +341,6 @@ int main()
     }
   }
 
-  for (auto & [beacon2, _] : allBeacons)
-  {
-    AOC::Point test = beacon2;
-    out << test.x << "," << test.y << "," << test.z << endl;
-  }
-
-  cout << "MAX DISTANCE:" << endl;
-  cout << maxDistance;
-
-  // out
-  // FStreamWriter writer(out);
-  // writer.WriteVector(v);
-
+  cout << "MAX DISTANCE:" << maxDistance << endl;
   return 0;
 }
