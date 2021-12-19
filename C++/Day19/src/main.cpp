@@ -12,6 +12,7 @@
 #include <memory>
 #include <numeric>
 #include <optional>
+#include <queue>
 #include <set>
 #include <sstream>
 #include <string>
@@ -68,138 +69,27 @@ map<AOC::Point, Metadata> GetScannersAround(const AOC::Point & beacon, const AOC
       }
     }
   }
-
-  //-----------------
-  // front
-
-  //{
-  //  AOC::Point candidateFront = beacon + distance;
-
-  //  candidateFront.RotateRight(beacon);
-  //  result.insert(candidateFront);
-
-  //  candidateFront.RotateRight(beacon);
-  //  result.insert(candidateFront);
-
-  //  candidateFront.RotateRight(beacon);
-  //  result.insert(candidateFront);
-
-  //  candidateFront.RotateRight(beacon);
-  //  result.insert(candidateFront);
-  //}
-
-  ////-----------------
-  //// back
-
-  //{
-  //  AOC::Point candidateBack = beacon - distance;
-
-  //  candidateBack.RotateRight(beacon);
-  //  result.insert(candidateBack);
-
-  //  candidateBack.RotateRight(beacon);
-  //  result.insert(candidateBack);
-
-  //  candidateBack.RotateRight(beacon);
-  //  result.insert(candidateBack);
-
-  //  candidateBack.RotateRight(beacon);
-  //  result.insert(candidateBack);
-  //}
-
-  ////-----------------
-  //// left
-  //{
-  //  AOC::Point candidateLeft = beacon + distance;
-
-  //  candidateLeft.RotateFront(beacon);
-  //  result.insert(candidateLeft);
-
-  //  candidateLeft.RotateFront(beacon);
-  //  result.insert(candidateLeft);
-
-  //  candidateLeft.RotateFront(beacon);
-  //  result.insert(candidateLeft);
-
-  //  candidateLeft.RotateFront(beacon);
-  //  result.insert(candidateLeft);
-  //}
-
-  ////-----------------
-  //// right
-  //{
-  //  AOC::Point candidateRight = beacon - distance;
-
-  //  candidateRight.RotateFront(beacon);
-  //  result.insert(candidateRight);
-
-  //  candidateRight.RotateFront(beacon);
-  //  result.insert(candidateRight);
-
-  //  candidateRight.RotateFront(beacon);
-  //  result.insert(candidateRight);
-
-  //  candidateRight.RotateFront(beacon);
-  //  result.insert(candidateRight);
-  //}
-
-  ////-----------------
-  //// top
-  //{
-  //  AOC::Point candidateTop = beacon + distance;
-
-  //  candidateTop.RotateTop(beacon);
-  //  result.insert(candidateTop);
-
-  //  candidateTop.RotateTop(beacon);
-  //  result.insert(candidateTop);
-
-  //  candidateTop.RotateTop(beacon);
-  //  result.insert(candidateTop);
-
-  //  candidateTop.RotateTop(beacon);
-  //  result.insert(candidateTop);
-  //}
-
-  ////-----------------
-  //// bottom
-  //{
-  //  AOC::Point candidateBottom = beacon - distance;
-
-  //  candidateBottom.RotateTop(beacon);
-  //  result.insert(candidateBottom);
-
-  //  candidateBottom.RotateTop(beacon);
-  //  result.insert(candidateBottom);
-
-  //  candidateBottom.RotateTop(beacon);
-  //  result.insert(candidateBottom);
-
-  //  candidateBottom.RotateTop(beacon);
-  //  result.insert(candidateBottom);
-  //}
-
   return result;
 }
 
-void AlignScannersPositions(Scanner & scanner1, Scanner & scanner2)
+bool AlignScannersPositions(Scanner & scanner1, Scanner & scanner2)
 {
-  if (!scanner1.position)
-    return;
+  if (!scanner1.position || scanner2.position)
+    return false;
 
-  optional<AOC::Point> position;
+  optional<AOC::Point> scannerPosition;
   optional<Metadata>   metadata;
 
   map<AOC::Point, int> candidatesCount;
 
   for (const auto & beacon1 : scanner1.beacons)
   {
-    if (position)
+    if (scannerPosition)
       break;
 
     for (const auto & beacon2 : scanner2.beacons)
     {
-      if (position)
+      if (scannerPosition)
         break;
 
       const auto & scannersAround = GetScannersAround(beacon1, beacon2);
@@ -207,65 +97,62 @@ void AlignScannersPositions(Scanner & scanner1, Scanner & scanner2)
       {
         if (++candidatesCount[candidateScannerPosition] >= 12)
         {
-          // calculate orientation when beacon1 == beacon2
-
-          auto test  = beacon2 - beacon1;
-          auto test1 = candidateScannerPosition - test;
-
-          position = candidateScannerPosition;
-          metadata = candidateMetadata;
+          scannerPosition = candidateScannerPosition;
+          metadata        = candidateMetadata;
           break;
         }
       }
     }
   }
 
-  if (position)
+  if (scannerPosition)
   {
-    if (scanner2.position)
+    // align position
+    scanner2.position = *scannerPosition - *scanner1.position;
+
+    // align beacons
+    for (auto & beacon2 : scanner2.beacons)
     {
-      // assert(*scanner2.position == *position - *scanner1.position);
+      vector<long long> dimensions = { beacon2.x, beacon2.y, beacon2.z };
+
+      beacon2.x = dimensions[(*metadata).permutation[0]] * (*metadata).orientation[0];
+      beacon2.y = dimensions[(*metadata).permutation[1]] * (*metadata).orientation[1];
+      beacon2.z = dimensions[(*metadata).permutation[2]] * (*metadata).orientation[2];
+
+      beacon2.RotateLeft(*scanner2.position);
+      beacon2.RotateLeft(*scanner2.position);
+
+      beacon2.z += 2 * (scanner2.position->z - beacon2.z);
     }
-    else
-    {
-      // align position
-      scanner2.position = *position - *scanner1.position;
 
-      for (auto & beacon2 : scanner2.beacons)
-      {
-        vector<long long> dimensions = { beacon2.x, beacon2.y, beacon2.z };
-
-        beacon2.x = dimensions[(*metadata).permutation[0]] * (*metadata).orientation[0];
-        beacon2.y = dimensions[(*metadata).permutation[1]] * (*metadata).orientation[1];
-        beacon2.z = dimensions[(*metadata).permutation[2]] * (*metadata).orientation[2];
-
-        beacon2.RotateLeft(*scanner2.position);
-        beacon2.RotateLeft(*scanner2.position);
-
-        beacon2.z += 2 * (scanner2.position->z - beacon2.z);
-      }
-    }
+    return true;
   }
+
+  return false;
 }
 
 set<AOC::Point> DetectBeaconPositions(vector<Scanner> & scanners)
 {
-  int n = 3;
-  while (n--)
-  {
-    for (int i = 0; i < scanners.size(); i++)
-    {
-      for (int j = 0; j < scanners.size(); j++)
-      {
-        if (i == j)
-          continue;
+  std::set<int> q;
+  q.insert(0);
 
-        AlignScannersPositions(scanners[i], scanners[j]);
+  while (!q.empty())
+  {
+    auto & detectedScanner = scanners[*q.begin()];
+    q.erase(q.begin());
+
+    for (int i = 0; i < scanners.size(); ++i)
+    {
+      if (detectedScanner.scannerID == i)
+        continue;
+
+      if (AlignScannersPositions(detectedScanner, scanners[i]))
+      {
+        q.insert(i);
       }
     }
   }
 
-  // debug
   set<AOC::Point> allBeacons;
   for (auto & scanner : scanners)
   {
@@ -291,6 +178,7 @@ int main()
   int                scannerId = 0;
   vector<AOC::Point> beacons;
 
+  // parse input
   for (auto line : input)
   {
     if (line.empty())
@@ -318,7 +206,7 @@ int main()
   // push last scanner
   scanners.push_back({ scannerId, nullopt, beacons });
 
-  // put first scanner position as { 0, 0, 0}
+  // put first scanner position as { 0, 0, 0 }
   scanners[0].position = { 0, 0, 0 };
 
   auto allBeacons = DetectBeaconPositions(scanners);

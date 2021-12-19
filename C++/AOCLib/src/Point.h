@@ -40,8 +40,6 @@ struct Point
 
   void RotateRight(const Point & origin = { 0, 0 });
   void RotateLeft(const Point & origin = { 0, 0 });
-  void RotateFront(const Point & origin = { 0, 0 });
-  void RotateTop(const Point & origin = { 0, 0 });
 
   void FlipX();
   void FlipY();
