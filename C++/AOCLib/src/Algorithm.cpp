@@ -105,7 +105,7 @@ long long AOC::ManhattenDistance(long long x1, long long y1, long long x2, long 
 
 long long AOC::ManhattenDistance(const Point & a, const Point & b)
 {
-  return AOC::ManhattenDistance(a.x, a.y, b.x, b.y);
+  return Abs(a.x - b.x) + Abs(a.y - b.y) + Abs(a.z - b.z) + Abs(a.w - b.w);
 }
 
 vector<vector<long long>> AOC::MultiplyMatrix(const vector<vector<long long>> & first,

@@ -20,7 +20,7 @@ bool AOC::Point::operator<(const Point & second) const
   return tie(x, y, z, w) < tie(second.x, second.y, second.z, second.w);
 }
 
-AOC::Point AOC::Point::operator+(const AOC::Point & second)
+AOC::Point AOC::Point::operator+(const AOC::Point & second) const
 {
   AOC::Point newPosition = *this;
 
@@ -32,12 +32,24 @@ AOC::Point AOC::Point::operator+(const AOC::Point & second)
   return newPosition;
 }
 
-AOC::Point & AOC::Point::operator+=(const AOC::Point & second)
+AOC::Point AOC::Point::operator-(const AOC::Point & second) const
 {
-  x += second.x;
-  y += second.y;
-  z += second.z;
-  w += second.w;
+  AOC::Point newPosition = *this;
+
+  newPosition.x -= second.x;
+  newPosition.y -= second.y;
+  newPosition.z -= second.z;
+  newPosition.w -= second.w;
+
+  return newPosition;
+}
+
+AOC::Point & AOC::Point::operator-=(const AOC::Point & second)
+{
+  x -= second.x;
+  y -= second.y;
+  z -= second.z;
+  w -= second.w;
 
   return *this;
 }
@@ -222,12 +234,67 @@ void AOC::Point::RotateRight(const Point & origin)
   *this = newPosition;
 }
 
+void AOC::Point::RotateFront(const Point & origin)
+{
+  AOC::Point newPosition = *this;
+
+  // translate to OXY
+  newPosition.x -= origin.x;
+  newPosition.y -= origin.y;
+  newPosition.z -= origin.z;
+
+  // rotate
+  newPosition = { newPosition.x, -1 * newPosition.z, newPosition.y };
+
+  // translate back
+  newPosition.x += origin.x;
+  newPosition.y += origin.y;
+  newPosition.z += origin.z;
+
+  *this = newPosition;
+}
+
+void AOC::Point::RotateTop(const Point & origin)
+{
+  AOC::Point newPosition = *this;
+
+  // translate to OXY
+  newPosition.x -= origin.x;
+  newPosition.y -= origin.y;
+  newPosition.z -= origin.z;
+
+  // rotate
+  newPosition = { -1 * newPosition.z, newPosition.y, newPosition.x };
+
+  // translate back
+  newPosition.x += origin.x;
+  newPosition.y += origin.y;
+  newPosition.z += origin.z;
+
+  *this = newPosition;
+}
+
 void AOC::Point::RotateLeft(const Point & origin)
 {
   // 270 degree right rotation
   RotateRight(origin);
   RotateRight(origin);
   RotateRight(origin);
+}
+
+void AOC::Point::FlipX()
+{
+  x *= -1;
+}
+
+void AOC::Point::FlipY()
+{
+  y *= -1;
+}
+
+void AOC::Point::FlipZ()
+{
+  z *= -1;
 }
 
 //------------------------------------------------------------

@@ -12,8 +12,11 @@ struct Point
   bool operator!=(const Point & second) const;
   bool operator<(const Point & second) const;
 
-  Point   operator+(const Point & second);
+  Point   operator+(const Point & second) const;
   Point & operator+=(const Point & second);
+
+  Point   operator-(const Point & second) const;
+  Point & operator-=(const Point & second);
 
   bool IsInBoundary(const Point & from, const Point & to);
 
@@ -37,6 +40,12 @@ struct Point
 
   void RotateRight(const Point & origin = { 0, 0 });
   void RotateLeft(const Point & origin = { 0, 0 });
+  void RotateFront(const Point & origin = { 0, 0 });
+  void RotateTop(const Point & origin = { 0, 0 });
+
+  void FlipX();
+  void FlipY();
+  void FlipZ();
 
   long long x{ 0 };
   long long y{ 0 };
