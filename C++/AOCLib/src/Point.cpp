@@ -154,8 +154,8 @@ vector<AOC::Point> AOC::Point::GetDirectNeighbours()
 
 vector<AOC::Point> AOC::Point::GetAll2DNeighbours()
 {
-  return { GetTop(),    GetTopRight(),   GetRight(), GetBottomRight(),
-           GetBottom(), GetBottomLeft(), GetLeft(),  GetTopLeft() };
+  return { GetTopLeft(), GetTop(),        GetTopRight(), GetLeft(),
+           GetRight(),   GetBottomLeft(), GetBottom(),   GetBottomRight() };
 }
 
 vector<AOC::Point> AOC::Point::GetAll3DNeighbours() const
