@@ -18,6 +18,9 @@ struct Point
   Point   operator-(const Point & second) const;
   Point & operator-=(const Point & second);
 
+  long long &       operator[](size_t pos);
+  const long long & operator[](size_t pos) const;
+
   bool IsInBoundary(const Point & from, const Point & to);
 
   Point GetLeft();

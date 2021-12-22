@@ -54,6 +54,40 @@ AOC::Point & AOC::Point::operator-=(const AOC::Point & second)
   return *this;
 }
 
+long long & AOC::Point::operator[](size_t pos)
+{
+  assert(pos >= 0 && pos <= 3);
+
+  if (pos == 0)
+    return x;
+  else if (pos == 1)
+    return y;
+  else if (pos == 2)
+    return z;
+  else if (pos == 3)
+    return w;
+
+  static long long kInvalid;
+  return kInvalid;
+}
+
+const long long & AOC::Point::operator[](size_t pos) const
+{
+  assert(pos >= 0 && pos <= 3);
+
+  if (pos == 0)
+    return x;
+  else if (pos == 1)
+    return y;
+  else if (pos == 2)
+    return z;
+  else if (pos == 3)
+    return w;
+
+  static long long kInvalid;
+  return kInvalid;
+}
+
 bool AOC::Point::IsInBoundary(const Point & from, const Point & to)
 {
   return (x >= from.x && y >= from.y && z >= from.z && w >= from.w && x <= to.x && y <= to.y &&
