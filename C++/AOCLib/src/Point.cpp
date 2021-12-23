@@ -32,6 +32,16 @@ AOC::Point AOC::Point::operator+(const AOC::Point & second) const
   return newPosition;
 }
 
+AOC::Point & AOC::Point::operator+=(const AOC::Point & second)
+{
+  x += second.x;
+  y += second.y;
+  z += second.z;
+  w += second.w;
+
+  return *this;
+}
+
 AOC::Point AOC::Point::operator-(const AOC::Point & second) const
 {
   AOC::Point newPosition = *this;

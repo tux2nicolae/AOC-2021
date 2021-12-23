@@ -3,6 +3,7 @@
  * @author : Nicolae Telechi
  */
 #include <algorithm>
+#include <assert.h>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -10,8 +11,10 @@
 #include <memory>
 #include <numeric>
 #include <optional>
+#include <queue>
 #include <set>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -33,11 +36,20 @@ int main()
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  auto          input = reader.ReadDataAs<int>();
+  auto          lines = reader.ReadLines();
 
-  // out
-  // FStreamWriter writer(out);
-  // writer.WriteVector(v);
+  for (auto line : lines)
+  {
+    auto matches = AOC::ExtractMatches(line, "(.*)");
+    assert(matches.size());
+  }
+
+  // for (int i = 0; i < lines.size(); i++)
+  // {
+  //   for (int j = 0; j < lines[i].size(); i++)
+  //   {
+  //   }
+  // }
 
   return 0;
 }
