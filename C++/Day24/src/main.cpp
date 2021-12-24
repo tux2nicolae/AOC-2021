@@ -30,23 +30,95 @@ using namespace std;
 #include "../../AOCLib/src/Ship.h"
 #include "../../AOCLib/src/Time.h"
 
+unordered_map<string, int> variables;
+
+int         dataIt = 0;
+vector<int> inputData1{ 4, 5, 3, 1, 1, 1, 9, 1, 5, 1, 6, 1, 1, 1 };
+vector<int> inputData2{ 9, 9, 9, 9, 9, 7, 9, 5, 9, 1, 9, 4, 5, 6 };
+
+int readNextData()
+{
+  return inputData1[dataIt++];
+}
+
+void RunOperation(string operation, string a, string b)
+{
+  if (operation == "inp")
+  {
+    variables[a] = readNextData();
+    cout << "-----------------------inp [" << a << "=" << variables[a] << "]-----------------"
+         << endl;
+  }
+  else
+  {
+    int var = 0;
+    if (b.size() == 1 && b[0] >= 'a' && b[0] <= 'z')
+    {
+      var = variables[b];
+    }
+    else
+      var = stoi(b);
+
+    if (operation == "add")
+    {
+      cout << a << "+=" << b << " (" << var << ")";
+
+      variables[a] = variables[a] + var;
+    }
+    else if (operation == "mul")
+    {
+      cout << a << "*=" << b << " (" << var << ")";
+
+      variables[a] = variables[a] * var;
+    }
+    else if (operation == "div")
+    {
+      cout << a << "/=" << b << " (" << var << ")";
+
+      assert(var != 0);
+      variables[a] = variables[a] / var;
+    }
+    else if (operation == "mod")
+    {
+      cout << a << "%=" << b << " (" << var << ")";
+
+      assert(var != 0);
+      variables[a] = variables[a] % var;
+    }
+    else if (operation == "eql")
+    {
+      cout << a << "=" << a << "==" << b << " (" << var << ")  ================ ";
+      variables[a] = variables[a] == var;
+    }
+
+    cout << "  -> " << variables[a] << endl;
+  }
+}
+
 int main()
 {
   ifstream in("..\\src\\_input.in");
   // ofstream out("..\\src\\_output.out");
 
   FStreamReader reader(in);
-  auto          lines = reader.ReadLines();
-
-  for (auto line : lines)
+  while (in.good())
   {
-    auto matches = AOC::ExtractMatches(line, "(.*)");
-    assert(matches.size());
+    string operation, from, to;
+    in >> operation >> from;
+
+    if (operation != "inp")
+    {
+      in >> to;
+    }
+
+    RunOperation(operation, from, to);
   }
+
+  cout << "VALID : " << variables["z"];
 
   // for (int i = 0; i < lines.size(); i++)
   // {
-  //   for (int j = 0; j < lines[i].size(); i++)
+  //   for (int j = 0; j < lines[i].size(); j++)
   //   {
   //   }
   // }
